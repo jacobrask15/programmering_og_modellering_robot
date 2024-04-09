@@ -1,0 +1,42 @@
+class Environment
+
+values
+    q' : real = 10;
+    
+    public M1 : real = 90;
+    public M2 : real = 5;
+    public AE : real = 6.0;
+    public target : real = 45;
+
+instance variables
+    public env_q : real;
+    public env_motor_state: nat;
+    public env_motor_direction: real;
+    public data_history : seq of (real * int);
+
+
+operations
+    
+    public Environment: () ==> Environment
+    Environment() == (
+        env_q := 5;
+        env_motor_state := 0;
+        env_motor_direction := 1;
+    );
+
+    public get_env_q : () ==> real
+    get_env_q() == duration(0) (
+        return env_q;
+    )
+
+
+
+    public step: (real) ==> ()
+    step(delta) == duration(0) (
+        dcl qd : real := env_motor_state * env_motor_direction * q' * delta; 
+        env_q := qd + env_q;
+    );
+    
+
+end Environment 
+

@@ -1,0 +1,29 @@
+class sensor
+types
+    
+values
+    sensor_q:real
+    
+instance variables
+
+operations
+    public sensor: () ==> sensor
+    sensor() == (
+        sensor_q := 5;
+    );
+
+    public get_sensor_q() ==> real
+    get_sensor_q() == duration(0) (
+        return sensor_q;
+    )
+
+    
+    private read_env_q() ==> real
+    read_env_q() == duration(2) (
+        sensor_q = MySystem`arm_env.get_env_q();
+    ) 
+
+sync
+    mutex(get_sensor_q, read_env_q)
+
+end sensor

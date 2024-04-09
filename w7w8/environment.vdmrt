@@ -12,7 +12,7 @@ instance variables
     public env_q : real;
     public env_motor_state: nat;
     public env_motor_direction: real;
-    public data_history : seq of (real * int);
+    public data_history : seq of (real * real * nat * real ); --time  q  moter_state  motor_direction 
 
 
 operations
@@ -28,6 +28,14 @@ operations
     get_env_q() == duration(0) (
         return env_q;
     );
+
+    public recordState : () ==> () 
+    recordState() == duration(0) (
+        data_history := data_history ^ [mk_(time,env_q,env_motor_state,env_motor_state)];
+    );
+
+
+
 
     public step: (real) ==> ()
     step(delta) == duration(0) (

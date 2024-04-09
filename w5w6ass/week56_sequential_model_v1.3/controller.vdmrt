@@ -1,0 +1,58 @@
+class controller
+
+instance variables
+    public ctrl_q : real;
+    public ctrl_motor_state: nat;
+    public ctrl_motor_direction: real;
+
+
+operations
+    
+    public controller: () ==> controller
+    controller() == (
+        ctrl_q := 5;
+        ctrl_motor_state := 0;
+        ctrl_motor_direction := 1;
+    );
+
+    -- -1 CClockwise / 1 Clockwise
+    public setMotorState: (real) ==> ()
+    setMotorState(s) == duration(0) (
+        ctrl_motor_state := s;
+        MySystem`arm_env.env_motor_state := s;
+    )
+    pre s = 1 or s = 0;
+
+    -- 0 off / 1 on
+    public setMotorDirection: (real) ==> ()
+    setMotorDirection(dir) == duration(0) (
+        ctrl_motor_direction := dir;
+         MySystem`arm_env.env_motor_direction := dir;
+    )
+    pre dir = 1 or dir = -1;
+
+
+
+    public get_env_angle :() ==> () 
+    get_env_angle() == duration(0) (
+        ctrl_q := MySystem`arm_env.env_q;
+    );
+
+    public moveToTarget :() ==> ()
+    moveToTarget() == duration(0) (
+        if (ctrl_q < MySystem`arm_env.target - MySystem`arm_env.AE) then (
+            setMotorState(1);
+            setMotorDirection(1); --Increase angle
+        )
+        else if (ctrl_q > MySystem`arm_env.target + MySystem`arm_env.AE) then (
+            setMotorState(1);
+            setMotorDirection(-1); --Decrease angle
+        )
+        else (
+            setMotorState(0); --stop motor
+        )
+    ) 
+    
+
+
+end controller 

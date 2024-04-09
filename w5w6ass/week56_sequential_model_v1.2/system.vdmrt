@@ -1,0 +1,7 @@
+system MySystem
+
+instance variables
+    public static arm_controller:controller := new controller();
+    public static arm_env:Environment := new Environment();
+
+end MySystem

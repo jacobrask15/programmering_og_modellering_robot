@@ -14,7 +14,7 @@ types
 
 instance variables
     public env_q : real;
-    private final_sim_time : real
+    private final_sim_time : real;
     public env_motor_state: MOTERSTATE;
     public env_motor_direction: DIRECTION;
     public data_history : seq of (real * real * nat * real ); --time  q  moter_state  motor_direction 
@@ -33,7 +33,7 @@ operations
     public get_env_q : () ==> real
     get_env_q() == duration(0) (
         return env_q;
-    )
+    );
 
     public isFinished : () ==> ()
     isFinished() == skip;

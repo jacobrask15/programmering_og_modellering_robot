@@ -9,7 +9,7 @@ instance variables
     public ctrl_q : real;
     public ctrl_motor_state: MOTERSTATE;
     public ctrl_motor_direction: DIRECTION;
-    public target : real = 45;
+    public target : real := 45;
 
 
 

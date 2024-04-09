@@ -1,0 +1,68 @@
+class controller
+
+--opg a)
+types 
+    public MOTERSTATE = <ON> | <OFF>;
+    public DIRECTION = <UP> | <DOWN>;
+
+instance variables
+    public ctrl_q : real;
+    public ctrl_motor_state: MOTERSTATE;
+    public ctrl_motor_direction: DIRECTION;
+    public target : real = 45;
+
+
+
+operations
+    
+    public controller: () ==> controller
+    controller() == (
+        ctrl_q := 5;
+        ctrl_motor_state := OFF;
+        ctrl_motor_direction := UP;
+    );
+
+    -- -1 CClockwise / 1 Clockwise
+    public setMotorState: (MOTERSTATE) ==> ()
+    setMotorState(s) == duration(0) (
+        ctrl_motor_state := s;
+        MySystem`arm_env.env_motor_state := s;
+    )
+    pre s = ON or s = OFF; --states
+
+    -- 0 off / 1 on
+    public setMotorDirection: (DIRECTION) ==> ()
+    setMotorDirection(dir) == duration(0) (
+        ctrl_motor_direction := dir;
+        MySystem`arm_env.env_motor_direction := dir;
+    )
+    pre dir = UP or dir = DOWN; --states
+
+    public get_env_angle :() ==> () 
+    get_env_angle() == duration(0) (
+        ctrl_q := MySystem`arm_sensor.get_sensor_q();
+    );
+
+    public set_target :() ==> () 
+    set_target() == duration(0) (
+        
+    );
+
+    public moveToTarget :() ==> ()
+    moveToTarget() == duration(0) (
+        if (ctrl_q < MySystem`arm_env.target - MySystem`arm_env.AE) then (
+            setMotorState(ON);
+            setMotorDirection(UP); --Increase angle
+        )
+        else if (ctrl_q > MySystem`arm_env.target + MySystem`arm_env.AE) then (
+            setMotorState(ON);
+            setMotorDirection(DOWN); --Decrease angle
+        )
+        else (
+            setMotorState(OFF); --stop motor
+        )
+    ) 
+    
+
+
+end controller 

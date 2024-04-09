@@ -24,12 +24,10 @@ operations
         env_motor_direction := 1;
     );
 
-    public get_env_q : () ==> real
+    public get_env_q: () ==> real
     get_env_q() == duration(0) (
         return env_q;
-    )
-
-
+    );
 
     public step: (real) ==> ()
     step(delta) == duration(0) (

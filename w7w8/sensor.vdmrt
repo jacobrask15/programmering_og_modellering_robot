@@ -1,10 +1,8 @@
 class sensor
 types
     
-values
-    sensor_q:real
-    
 instance variables
+    sensor_q:real
 
 operations
     public sensor: () ==> sensor
@@ -12,16 +10,16 @@ operations
         sensor_q := 5;
     );
 
-    public get_sensor_q() ==> real
+    public get_sensor_q: () ==> real
     get_sensor_q() == duration(0) (
         return sensor_q;
-    )
+    );
 
     
-    private read_env_q() ==> real
+    private read_env_q: () ==> ()
     read_env_q() == duration(2) (
-        sensor_q = MySystem`arm_env.get_env_q();
-    ) 
+        sensor_q := MySystem`arm_env.get_env_q();
+    ); 
 
 sync
     mutex(get_sensor_q, read_env_q)

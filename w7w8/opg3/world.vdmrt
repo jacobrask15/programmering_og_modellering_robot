@@ -1,6 +1,10 @@
 class World
 --M1 90 , target 45, q' = 10
 
+types 
+    public MOTERSTATE = <ON> | <OFF>;
+    public DIRECTION = <UP> | <DOWN>;
+
 instance variables
     io : IO := new IO();
 
@@ -35,15 +39,15 @@ operations
         str := str ^ "\t \t";
         str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm_env.env_q);
         str := str ^ "\t \t";
-        str := str ^ VDMUtil`val2seq_of_char[nat](MySystem`arm_env.env_motor_state);
+        str := str ^ VDMUtil`val2seq_of_char[MOTERSTATE](MySystem`arm_env.env_motor_state);
         str := str ^ "\t \t";
-        str := str ^ VDMUtil`val2seq_of_char[int](MySystem`arm_env.env_motor_direction);
+        str := str ^ VDMUtil`val2seq_of_char[DIRECTION](MySystem`arm_env.env_motor_direction);
         str := str ^ "\t \t";
         str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm_controller.ctrl_q);
         str := str ^ "\t \t";
-        str := str ^ VDMUtil`val2seq_of_char[nat](MySystem`arm_controller.ctrl_motor_state);
+        str := str ^ VDMUtil`val2seq_of_char[MOTERSTATE](MySystem`arm_controller.ctrl_motor_state);
         str := str ^ "\t \t";
-        str := str ^ VDMUtil`val2seq_of_char[int](MySystem`arm_controller.ctrl_motor_direction);
+        str := str ^ VDMUtil`val2seq_of_char[DIRECTION](MySystem`arm_controller.ctrl_motor_direction);
         str := str ^ "\n";
         succ :=  io.echo(str);
     );
@@ -53,20 +57,20 @@ operations
         --ideal scenario
         echoInit();
         echoState(0);
-        MySystem`arm_controller.setMotorState(1);
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorState(<ON>);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(5);
         echoState(5);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(-1);
+        MySystem`arm_controller.setMotorDirection(<DOWN>);
         MySystem`arm_env.step(6);
         echoState(16);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(7);
         echoState(23);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(-1);
+        MySystem`arm_controller.setMotorDirection(<DOWN>);
         MySystem`arm_env.step(8);
         echoState(31);
         MySystem`arm_controller.get_env_angle();
@@ -79,12 +83,12 @@ operations
         --ideal scenario
         echoInit();
         echoState(0);
-        MySystem`arm_controller.setMotorState(1);
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorState(<ON>);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(4);
         echoState(4);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorState(0);
+        MySystem`arm_controller.setMotorState(<OFF>);
         MySystem`arm_env.step(10);
         echoState(14);
         MySystem`arm_controller.get_env_angle();
@@ -97,20 +101,20 @@ operations
         -- unstable perfect scenario
         echoInit();
         echoState(0);
-        MySystem`arm_controller.setMotorState(1);
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorState(<ON>);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(2);
         echoState(2);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(-1);
+        MySystem`arm_controller.setMotorDirection(<DOWN>);
         MySystem`arm_env.step(5);
         echoState(7);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(9);
         echoState(16);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(-1);
+        MySystem`arm_controller.setMotorDirection(<DOWN>);
         MySystem`arm_env.step(14);
         echoState(30);
         MySystem`arm_controller.get_env_angle();
@@ -121,20 +125,20 @@ operations
     Scenario3() == (
         echoInit();
         echoState(0);
-        MySystem`arm_controller.setMotorState(1);
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorState(<ON>);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(5);
         echoState(5);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(-1);
+        MySystem`arm_controller.setMotorDirection(<DOWN>);
         MySystem`arm_env.step(2);
         echoState(7);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorDirection(1);
+        MySystem`arm_controller.setMotorDirection(<UP>);
         MySystem`arm_env.step(1);
         echoState(8);
         MySystem`arm_controller.get_env_angle();
-        MySystem`arm_controller.setMotorState(0);
+        MySystem`arm_controller.setMotorState(<OFF>);
         MySystem`arm_env.step(10);
         echoState(18);
         MySystem`arm_controller.get_env_angle();
@@ -147,9 +151,9 @@ operations
         echoInit();
         echoState(0);
         for i = 0 to 7 do ( 
-            MySystem`arm_controller.setMotorState(1);
+            MySystem`arm_controller.setMotorState(<ON>);
             MySystem`arm_env.step(14 - i*2);
-            MySystem`arm_controller.setMotorDirection(-1);
+            MySystem`arm_controller.setMotorDirection(<DOWN>);
             echoState(i*2);
             MySystem`arm_controller.get_env_angle();
         );

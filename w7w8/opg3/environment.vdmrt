@@ -3,8 +3,6 @@ class Environment
 values
     q' : real = 10;
     
-    public M1 : real = 90;
-    public M2 : real = 5;
     public AE : real = 6.0;
 
 --opg a)
@@ -17,8 +15,8 @@ instance variables
     private final_sim_time : real;
     public env_motor_state: MOTERSTATE;
     public env_motor_direction: DIRECTION;
-    public data_history : seq of (real * real * nat * real ); --time  q  moter_state  motor_direction 
-
+    public data_history : seq of (real * real * MOTERSTATE * DIRECTION ); --time  q  moter_state  motor_direction 
+    public last_time :
 
 operations
     
@@ -26,8 +24,9 @@ operations
     Environment() == (
         env_q := 5;
         final_sim_time := 0;
-        env_motor_state := OFF;
-        env_motor_direction := UP;
+        env_motor_state := <OFF>;
+        env_motor_direction := <UP>;
+        data_history := [];
     );
 
     public get_env_q : () ==> real
@@ -40,18 +39,26 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time,env_q,env_motor_state,env_motor_state)];
+        data_history := data_history ^ [mk_(time,env_q,env_motor_state,env_motor_direction)];
     );
 
     --hvad gør jeg lige her nu??
     public step: (real) ==> ()
     step(delta) == duration(0) (
-        dcl qd : real := env_motor_state * env_motor_direction * q' * delta; 
+
+        dcl ms : nat := 0;
+        dcl md : int := -1;
+        dcl qd : real := 0;
+
+        if (env_motor_state = <ON>) then (ms := 1);
+        if (env_motor_direction = <UP>) then (md := 1);
+
+        qd := ms*md*q'*delta; 
         env_q := qd + env_q;
     );
 
 sync
-    per isFinished ==> (time > final_sim_time);
+    per isFinished => (time > final_sim_time);
 
 thread
     periodic(1,0,0,0)(recordState);

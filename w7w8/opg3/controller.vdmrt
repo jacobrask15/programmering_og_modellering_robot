@@ -75,7 +75,7 @@ operations
     
     
     thread
-        periodic(1E8,0,0,0)(loop);
+        periodic(1E9,0,0,0)(loop);
 
 
 end controller 

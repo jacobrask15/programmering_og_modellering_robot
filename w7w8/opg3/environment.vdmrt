@@ -45,7 +45,7 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time/1E6,env_q,env_motor_state,env_motor_direction)];
+        data_history := data_history ^ [mk_(time/1E9,env_q,env_motor_state,env_motor_direction)];
     );
 
     -- for controller to set state of env motor state
@@ -64,6 +64,8 @@ operations
     --hvad gør jeg lige her nu??
     public step: () ==> ()
     step() == duration(0) (
+        
+        
 
         dcl t : real := time / 1E9; -- in seconds
         dcl delta : real := t - last_time;
@@ -71,15 +73,14 @@ operations
         dcl ms : nat := 0;
         dcl md : int := -1;
         dcl qd : real := 0;
-
-        last_time := delta;
+        recordState();
+        last_time := t;
 
         if (env_motor_state = <ON>) then (ms := 1);
         if (env_motor_direction = <UP>) then (md := 1);
 
         qd := ms*md*q'*delta; 
         env_q := qd + env_q;
-        recordState();
     );
     --post controller`M2 <= env_q and env_q <= controller`M1;
 

@@ -28,14 +28,14 @@ operations
 
     -- -1 CClockwise / 1 Clockwise
     public setMotorState: (MOTORSTATE) ==> ()
-    setMotorState(s) == duration(10) (
+    setMotorState(s) == duration(0) (
         ctrl_motor_state := s;
         MySystem`arm_env.setMotorState(s);
     ) pre s = <ON> or s = <OFF>; --states
 
     -- 0 off / 1 on
     public setMotorDirection: (DIRECTION) ==> ()
-    setMotorDirection(dir) == duration(1E6) ( --1 ms
+    setMotorDirection(dir) == duration(0) ( 
         ctrl_motor_direction := dir;
         MySystem`arm_env.setMotorDirection(dir);
     ) pre dir = <UP> or dir = <DOWN>; --states
@@ -75,7 +75,7 @@ operations
     
     
     thread
-        periodic(1.2E9,0,0,0)(loop);
+        periodic(1E8,0,0,0)(loop);
 
 
 end controller 

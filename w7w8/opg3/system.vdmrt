@@ -11,6 +11,7 @@ instance variables
 
     busCS : BUS := new BUS (<FCFS>, 1E100, {cpuController,cpuSensor});
     busES : BUS := new BUS (<FCFS>, 1E100, {cpuEnv, cpuSensor});
+    busCE : BUS := new BUS (<FCFS>, 1E100, {cpuEnv, cpuController});
 
 
 operations

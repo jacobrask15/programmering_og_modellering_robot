@@ -1,9 +1,7 @@
 class Environment
 
 values
-    q' : real = 10;
-    
-    public AE : real = 6.0;
+   
 
 --opg a)
 types 
@@ -11,6 +9,8 @@ types
     public DIRECTION = <UP> | <DOWN>;
 
 instance variables
+    public q' : real := 10;
+    public AE : real := 6.0;
     public env_q : real;
     private final_sim_time : real;
     public env_motor_state: MOTORSTATE;
@@ -50,7 +50,7 @@ operations
 
     -- for controller to set state of env motor state
     public setMotorState: (MOTORSTATE) ==> ()
-    setMotorState(s) == duration(10) (
+    setMotorState(s) == duration(1E6) (
         env_motor_state := s;
     );
 

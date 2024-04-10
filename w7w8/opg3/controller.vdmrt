@@ -30,14 +30,14 @@ operations
     public setMotorState: (MOTERSTATE) ==> ()
     setMotorState(s) == duration(10) (
         ctrl_motor_state := s;
-        MySystem`arm_env.env_motor_state := s;
+        MySystem`arm_env.setMotorState(s);
     ) pre s = <ON> or s = <OFF>; --states
 
     -- 0 off / 1 on
     public setMotorDirection: (DIRECTION) ==> ()
     setMotorDirection(dir) == duration(1E6) ( --1 ms
         ctrl_motor_direction := dir;
-        MySystem`arm_env.env_motor_direction := dir;
+        MySystem`arm_env.setMotorDirection(dir);
     ) pre dir = <UP> or dir = <DOWN>; --states
 
     public get_env_angle :() ==> () 

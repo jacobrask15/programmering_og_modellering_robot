@@ -28,7 +28,7 @@ operations
 
     -- -1 CClockwise / 1 Clockwise
     public setMotorState: (MOTERSTATE) ==> ()
-    setMotorState(s) == duration(10) (
+    setMotorState(s) == duration(1E6) (
         ctrl_motor_state := s;
         MySystem`arm_env.env_motor_state := s;
     ) pre s = <ON> or s = <OFF>; --states
@@ -41,7 +41,7 @@ operations
     ) pre dir = <UP> or dir = <DOWN>; --states
 
     public get_env_angle :() ==> () 
-    get_env_angle() == duration(3E6) ( --3ms
+    get_env_angle() == duration(0) ( -- duration is in sensor
         ctrl_q := MySystem`arm_sensor.get_sensor_q();
     );
 
@@ -76,7 +76,7 @@ operations
     
     
     thread
-        periodic(7,0,0,0)(loop);
+        periodic(50,0,0,0)(loop);
 
 
 end controller 

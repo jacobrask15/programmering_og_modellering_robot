@@ -11,13 +11,13 @@ operations
     );
 
     public get_sensor_q: () ==> real
-    get_sensor_q() == duration(0) (
+    get_sensor_q() == duration(1E6) (
         return sensor_q;
     );
 
     
     private read_env_q: () ==> ()
-    read_env_q() == duration(2) (
+    read_env_q() == duration(1E9) (
         sensor_q := MySystem`arm_env.get_env_q();
     ); 
 

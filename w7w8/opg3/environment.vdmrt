@@ -74,7 +74,7 @@ sync
     per isFinished => (time > final_sim_time);
 
 thread
-    periodic(1,0,0,0)(step);
+    periodic(1E6,0,0,0)(step);
 
 end Environment 
 

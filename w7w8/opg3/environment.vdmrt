@@ -36,9 +36,9 @@ operations
     );
 
     public setFinalSimulationTime : (real) ==> ()
-    setFinalSimulationTime(t) == duration(0) {
+    setFinalSimulationTime(t) == duration(0) (
         final_sim_time := t;
-    }
+    );
 
     public isFinished : () ==> ()
     isFinished() == skip;

@@ -24,4 +24,8 @@ operations
 sync
     mutex(get_sensor_q, read_env_q)
 
+
+thread
+    periodic(1,0,0,0)(read_env_q);
+
 end sensor

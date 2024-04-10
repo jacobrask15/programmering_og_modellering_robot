@@ -59,19 +59,19 @@ operations
         echoState(0);
         MySystem`arm_controller.setMotorState(<ON>);
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(5);
+        MySystem`arm_env.step();
         echoState(5);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<DOWN>);
-        MySystem`arm_env.step(6);
+        MySystem`arm_env.step();
         echoState(16);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(7);
+        MySystem`arm_env.step();
         echoState(23);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<DOWN>);
-        MySystem`arm_env.step(8);
+        MySystem`arm_env.step();
         echoState(31);
         MySystem`arm_controller.get_env_angle();
         echoState(32);
@@ -85,11 +85,11 @@ operations
         echoState(0);
         MySystem`arm_controller.setMotorState(<ON>);
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(4);
+        MySystem`arm_env.step();
         echoState(4);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorState(<OFF>);
-        MySystem`arm_env.step(10);
+        MySystem`arm_env.step();
         echoState(14);
         MySystem`arm_controller.get_env_angle();
         echoState(15);
@@ -103,19 +103,19 @@ operations
         echoState(0);
         MySystem`arm_controller.setMotorState(<ON>);
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(2);
+        MySystem`arm_env.step();
         echoState(2);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<DOWN>);
-        MySystem`arm_env.step(5);
+        MySystem`arm_env.step();
         echoState(7);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(9);
+        MySystem`arm_env.step();
         echoState(16);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<DOWN>);
-        MySystem`arm_env.step(14);
+        MySystem`arm_env.step();
         echoState(30);
         MySystem`arm_controller.get_env_angle();
         return true;
@@ -127,19 +127,19 @@ operations
         echoState(0);
         MySystem`arm_controller.setMotorState(<ON>);
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(5);
+        MySystem`arm_env.step();
         echoState(5);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<DOWN>);
-        MySystem`arm_env.step(2);
+        MySystem`arm_env.step();
         echoState(7);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorDirection(<UP>);
-        MySystem`arm_env.step(1);
+        MySystem`arm_env.step();
         echoState(8);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.setMotorState(<OFF>);
-        MySystem`arm_env.step(10);
+        MySystem`arm_env.step();
         echoState(18);
         MySystem`arm_controller.get_env_angle();
         return true;
@@ -152,7 +152,7 @@ operations
         echoState(0);
         for i = 0 to 7 do ( 
             MySystem`arm_controller.setMotorState(<ON>);
-            MySystem`arm_env.step(14 - i*2);
+            MySystem`arm_env.step();
             MySystem`arm_controller.setMotorDirection(<DOWN>);
             echoState(i*2);
             MySystem`arm_controller.get_env_angle();
@@ -169,7 +169,7 @@ operations
         echoState(i);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.moveToTarget();
-        MySystem`arm_env.step(1);
+        MySystem`arm_env.step();
         );
 
     return true;
@@ -185,7 +185,7 @@ operations
         echoState(i);
         MySystem`arm_controller.get_env_angle();
         MySystem`arm_controller.moveToTarget();
-        MySystem`arm_env.step(9-i);
+        MySystem`arm_env.step();
         );
 
     return true;
@@ -196,8 +196,10 @@ operations
     RunScenario1() == (
         MySystem`arm_env.setFinalSimulationTime(10);
         start(MySystem`arm_env);
+        start(MySystem`arm_controller);
+        start(MySystem`arm_sensor);
         MySystem`arm_env.isFinished();
-        return MySystem`env.data_history;
+        return MySystem`arm_env.data_history;
     );
 
 end World

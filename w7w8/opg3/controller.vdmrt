@@ -31,26 +31,27 @@ operations
     setMotorState(s) == duration(10) (
         ctrl_motor_state := s;
         MySystem`arm_env.env_motor_state := s;
-    )
-    pre s = <ON> or s = <OFF>; --states
+    ) pre s = <ON> or s = <OFF>; --states
 
     -- 0 off / 1 on
     public setMotorDirection: (DIRECTION) ==> ()
     setMotorDirection(dir) == duration(1E6) ( --1 ms
         ctrl_motor_direction := dir;
         MySystem`arm_env.env_motor_direction := dir;
-    )
-    pre dir = <UP> or dir = <DOWN>; --states
+    ) pre dir = <UP> or dir = <DOWN>; --states
 
     public get_env_angle :() ==> () 
-    get_env_angle() == duration(0) (
+    get_env_angle() == duration(3E6) ( --3ms
         ctrl_q := MySystem`arm_sensor.get_sensor_q();
     );
 
     public set_target : (real) ==> () 
     set_target(t) == duration(0) (
         if (t < M1 and t > M2) then (target := t;)  
-    );
+    )
+    pre t<M1 and t>M2
+    post target<M1 and target>M2;
+
 
     public moveToTarget :() ==> ()
     moveToTarget() == duration(0) (
@@ -65,8 +66,17 @@ operations
         else (
             setMotorState(<OFF>); --stop motor
         )
-    ) 
+    );
+
+    private loop : () ==> ()
+    loop() == duration(0) (
+        get_env_angle();
+        moveToTarget();
+    );
     
+    
+    thread
+        periodic(5,0,0,0)(loop);
 
 
 end controller 

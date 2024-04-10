@@ -223,8 +223,9 @@ operations
     public RunScenario3 : () ==> (seq of (real * real * MOTORSTATE * DIRECTION ))
     RunScenario3() == (
         
-        MySystem`arm_env.q' := 20; -- change speed
-        MySystem`arm_env.AE := 2; -- accepted error
+        MySystem`arm_env.q' := 50; -- change speed
+        MySystem`arm_env.AE := 5; -- accepted error
+        MySystem`arm_controller.set_updating_speed(9E8);
         MySystem`arm_env.setFinalSimulationTime(8E9);
 
 

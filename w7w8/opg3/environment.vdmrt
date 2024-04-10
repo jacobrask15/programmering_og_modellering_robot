@@ -16,7 +16,7 @@ instance variables
     public env_motor_state: MOTERSTATE;
     public env_motor_direction: DIRECTION;
     public data_history : seq of (real * real * MOTERSTATE * DIRECTION ); --time  q  moter_state  motor_direction 
-    public last_time :
+    public last_time : real;
 
 operations
     
@@ -27,6 +27,7 @@ operations
         env_motor_state := <OFF>;
         env_motor_direction := <UP>;
         data_history := [];
+        last_time := 0;
     );
 
     public get_env_q : () ==> real
@@ -43,19 +44,25 @@ operations
     );
 
     --hvad gør jeg lige her nu??
-    public step: (real) ==> ()
-    step(delta) == duration(0) (
+    public step: () ==> ()
+    step() == duration(0) (
+
+        dcl t : real := time / 1E9; -- in seconds
+        dcl delta : real := t - last_time;
 
         dcl ms : nat := 0;
         dcl md : int := -1;
         dcl qd : real := 0;
+
+        last_time := delta;
 
         if (env_motor_state = <ON>) then (ms := 1);
         if (env_motor_direction = <UP>) then (md := 1);
 
         qd := ms*md*q'*delta; 
         env_q := qd + env_q;
-    );
+    )
+    post controller`M2 <= env_q and env_q <= controller`M1;
 
 sync
     per isFinished => (time > final_sim_time);

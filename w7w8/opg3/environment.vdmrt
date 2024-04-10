@@ -66,6 +66,7 @@ operations
 
         qd := ms*md*q'*delta; 
         env_q := qd + env_q;
+        recordState();
     )
     post controller`M2 <= env_q and env_q <= controller`M1;
 
@@ -73,7 +74,7 @@ sync
     per isFinished => (time > final_sim_time);
 
 thread
-    periodic(1,0,0,0)(recordState);
+    periodic(1,0,0,0)(step);
 
 end Environment 
 

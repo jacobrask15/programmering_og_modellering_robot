@@ -246,4 +246,19 @@ operations
         return MySystem`arm_env.data_history;
     );
 
+    public RunScenario5 : () ==> (seq of (real * real * MOTORSTATE * DIRECTION ))
+    RunScenario5() == (
+        
+       MySystem`arm_env.q' := 20; -- change speed
+        MySystem`arm_env.AE := 2; -- accepted error
+        MySystem`arm_env.setFinalSimulationTime(8E9);
+
+
+        start(MySystem`arm_env);
+        start(MySystem`arm_controller);
+        start(MySystem`arm_sensor);
+        MySystem`arm_env.isFinished();
+        return MySystem`arm_env.data_history;
+    );
+
 end World

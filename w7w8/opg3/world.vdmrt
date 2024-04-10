@@ -2,7 +2,7 @@ class World
 --M1 90 , target 45, q' = 10
 
 types 
-    public MOTERSTATE = <ON> | <OFF>;
+    public MOTORSTATE = <ON> | <OFF>;
     public DIRECTION = <UP> | <DOWN>;
 
 instance variables
@@ -39,13 +39,13 @@ operations
         str := str ^ "\t \t";
         str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm_env.env_q);
         str := str ^ "\t \t";
-        str := str ^ VDMUtil`val2seq_of_char[MOTERSTATE](MySystem`arm_env.env_motor_state);
+        str := str ^ VDMUtil`val2seq_of_char[MOTORSTATE](MySystem`arm_env.env_motor_state);
         str := str ^ "\t \t";
         str := str ^ VDMUtil`val2seq_of_char[DIRECTION](MySystem`arm_env.env_motor_direction);
         str := str ^ "\t \t";
         str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm_controller.ctrl_q);
         str := str ^ "\t \t";
-        str := str ^ VDMUtil`val2seq_of_char[MOTERSTATE](MySystem`arm_controller.ctrl_motor_state);
+        str := str ^ VDMUtil`val2seq_of_char[MOTORSTATE](MySystem`arm_controller.ctrl_motor_state);
         str := str ^ "\t \t";
         str := str ^ VDMUtil`val2seq_of_char[DIRECTION](MySystem`arm_controller.ctrl_motor_direction);
         str := str ^ "\n";
@@ -192,7 +192,7 @@ operations
     );
 
 
-    public RunScenario1 : () ==> (seq of (real * real * MOTERSTATE * DIRECTION ))
+    public RunScenario1 : () ==> (seq of (real * real * MOTORSTATE * DIRECTION ))
     RunScenario1() == (
         MySystem`arm_env.setFinalSimulationTime(2E9);
         start(MySystem`arm_env);

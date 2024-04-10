@@ -5,12 +5,12 @@ instance variables
     public static arm_env:Environment := new Environment();
     public static arm_sensor:sensor := new sensor();
 
-    cpuEnv: CPU := new CPU (<FP>, 1E2);
-    cpuController : CPU := new CPU (<FP>, 1E2);
-    cpuSensor : CPU := new CPU (<FP>,1E2);
+    cpuEnv: CPU := new CPU (<FCFS>, 1E9);
+    cpuController : CPU := new CPU (<FCFS>, 1E9);
+    cpuSensor : CPU := new CPU (<FCFS>,1E9);
 
-    busCS : BUS := new BUS (<CSMACD>, 72E3, {cpuController,cpuSensor});
-    busES : BUS := new BUS (<CSMACD>, 72E3, {cpuEnv, cpuSensor});
+    busCS : BUS := new BUS (<FCFS>, 1E100, {cpuController,cpuSensor});
+    busES : BUS := new BUS (<FCFS>, 1E100, {cpuEnv, cpuSensor});
 
 
 operations

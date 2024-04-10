@@ -26,6 +26,6 @@ sync
 
 
 thread
-    periodic(1,0,0,0)(read_env_q);
+    periodic(7,0,0,0)(read_env_q);
 
 end sensor

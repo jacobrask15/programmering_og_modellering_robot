@@ -191,4 +191,13 @@ operations
     return true;
     );
 
+
+    public RunScenario1 : () ==> (seq of (real * real * nat * real ))
+    RunScenario1() == {
+        MySystem`arm_env.setFinalSimulationTime(10);
+        start(MySystem`arm_env);
+        MySystem`arm_env.isFinished();
+        return MySystem`env.data_history;
+    };
+
 end World

@@ -10,10 +10,12 @@ instance variables
     public ctrl_motor_state: MOTORSTATE;
     public ctrl_motor_direction: DIRECTION;
     public target : real := 45;
+    public up_speed : real := 1E8;
 
 values
     public M1 : real = 90;
     public M2 : real = 5;
+    
 
 
 
@@ -39,6 +41,12 @@ operations
         ctrl_motor_direction := dir;
         MySystem`arm_env.setMotorDirection(dir);
     ) pre dir = <UP> or dir = <DOWN>; --states
+
+
+    public set_updating_speed : (real) ==> ()
+    set_updating_speed(s) == duration(0) (
+        up_speed := s;
+    ); 
 
     public get_env_angle :() ==> () 
     get_env_angle() == duration(0) ( -- duration is in sensor
@@ -75,7 +83,7 @@ operations
     
     
     thread
-        periodic(1E9,0,0,0)(loop);
+        periodic(up_speed,0,0,0)(loop);
 
 
 end controller 

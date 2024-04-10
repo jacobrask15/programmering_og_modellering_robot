@@ -203,9 +203,6 @@ operations
         return MySystem`arm_env.data_history;
     );
 
-
-    
-
     public RunScenario2 : () ==> (seq of (real * real * MOTORSTATE * DIRECTION ))
     RunScenario2() == (
         
@@ -229,6 +226,19 @@ operations
         MySystem`arm_env.setFinalSimulationTime(8E9);
 
 
+        start(MySystem`arm_env);
+        start(MySystem`arm_controller);
+        start(MySystem`arm_sensor);
+        MySystem`arm_env.isFinished();
+        return MySystem`arm_env.data_history;
+    );
+
+
+    public RunScenario4 : () ==> (seq of (real * real * MOTORSTATE * DIRECTION ))
+    RunScenario4() == (
+        MySystem`arm_env.setFinalSimulationTime(8E10);
+        MySystem`arm_controller.set_updating_speed(3E9);
+        MySystem`arm_env.q' := 20;
         start(MySystem`arm_env);
         start(MySystem`arm_controller);
         start(MySystem`arm_sensor);

@@ -48,6 +48,19 @@ operations
         data_history := data_history ^ [mk_(time,env_q,env_motor_state,env_motor_direction)];
     );
 
+    -- for controller to set state of env motor state
+    public setMotorState: (MOTERSTATE) ==> ()
+    setMotorState(s) == duration(10) (
+        env_motor_state := s;
+    );
+
+    -- for controller to set state of env direction
+    public setMotorDirection: (DIRECTION) ==> ()
+    setMotorDirection(dir) == duration(1E6) ( --1 ms
+        env_motor_direction := dir;
+    );
+
+
     --hvad gør jeg lige her nu??
     public step: () ==> ()
     step() == duration(0) (

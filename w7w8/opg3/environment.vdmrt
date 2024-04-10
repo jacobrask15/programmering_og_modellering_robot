@@ -45,7 +45,7 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time,env_q,env_motor_state,env_motor_direction)];
+        data_history := data_history ^ [mk_(time/1E6,env_q,env_motor_state,env_motor_direction)];
     );
 
     -- for controller to set state of env motor state
@@ -80,14 +80,14 @@ operations
         qd := ms*md*q'*delta; 
         env_q := qd + env_q;
         recordState();
-    )
-    post controller`M2 <= env_q and env_q <= controller`M1;
+    );
+    --post controller`M2 <= env_q and env_q <= controller`M1;
 
 sync
     per isFinished => (time > final_sim_time);
 
 thread
-    periodic(1E6,0,0,0)(step);
+    periodic(1E8,0,0,0)(step);
 
 end Environment 
 

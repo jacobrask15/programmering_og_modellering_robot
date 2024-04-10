@@ -194,7 +194,7 @@ operations
 
     public RunScenario1 : () ==> (seq of (real * real * MOTERSTATE * DIRECTION ))
     RunScenario1() == (
-        MySystem`arm_env.setFinalSimulationTime(10);
+        MySystem`arm_env.setFinalSimulationTime(2E9);
         start(MySystem`arm_env);
         start(MySystem`arm_controller);
         start(MySystem`arm_sensor);

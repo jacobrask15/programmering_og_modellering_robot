@@ -8,8 +8,7 @@ operations
 
     public RunScenario5 : () ==> (seq of (real * real))
     RunScenario5() == (
-        MySystem`arm_env.AE := 2; -- accepted error
-        MySystem`arm_env.setFinalSimulationTime(8E9);
+        MySystem`arm_env.setFinalSimulationTime(15E9);
 
         start(MySystem`arm_env);
         start(MySystem`arm_controller);

@@ -11,7 +11,7 @@ operations
     );
     
     public setMotorTorque: (real) ==> ()
-    setMotorTorque(x) == duration(1000) ( 
+    setMotorTorque(x) == duration(0) ( 
         tau_m := x;
         MySystem`arm_env.setMotorEnvTorque(x);
     ); 

@@ -4,15 +4,15 @@ instance variables
     public ctrl_q : real;
     public target : real := 45;
     public ctrl_last_q : real := 0;
-    public e : real := 0;
+    public e : real;
     public last_e : real := 0;
     public ctrl_last_t : real := 0;
 
 values
     public M1 : real = 90;
     public M2 : real = 5;
-    public Kp : real = 2; --to be calculated
-    public Kd : real = 5; -- to be calculated
+    public Kp : real = 10; --to be calculated
+    public Kd : real = 1.5; -- to be calculated
     
 
 operations
@@ -20,6 +20,7 @@ operations
     public controller: () ==> controller
     controller() == (
         ctrl_q := 5;
+        e := target;
     );
 
     public get_env_angle :() ==> () 
@@ -29,7 +30,7 @@ operations
 
     public set_target : (real) ==> () 
     set_target(t) == duration(0) (
-        if (t < M1 and t > M2) then (target := t;)  
+        if (t < M1 and t > M2) then (target := t; e := target;)  
     )
     pre t<M1 and t>M2
     post target<M1 and target>M2;
@@ -38,11 +39,11 @@ operations
     regulate() == duration(0) (
 
         -- error calculations
-        dcl time_now : real := time;
+        dcl time_now : real := time/1E9 + 1;
         dcl dt : real;
         dcl e' : real;
         dcl tau_m : real;
-        e := ctrl_q - ctrl_last_q;
+        e := target - ctrl_last_q;
         ctrl_last_q := ctrl_q;
         dt := time_now - ctrl_last_t;
         ctrl_last_t := time_now;
@@ -63,7 +64,7 @@ operations
 
     
     thread
-        periodic(1E7,0,0,0)(loop); --10ms
+        periodic(1E7+2,0,0,0)(loop); 
 
 
 end controller 

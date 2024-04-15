@@ -16,7 +16,6 @@ instance variables
     public q' : real := 0;
     public env_last_q' : real := 0;
     public env_last_q : real := 0;
-    public AE : real := 6.0;
     public env_q : real := 0;
     private final_sim_time : real;
     public data_history : seq of (real * real); --time  q  moter_state  motor_direction 
@@ -51,12 +50,12 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time/1E9,env_q)];
+        data_history := data_history ^ [mk_(time/1E9 + 1,env_q)];
     );
 
 
     public setMotorEnvTorque: (real) ==> ()
-    setMotorEnvTorque(s) == duration(1E6) (
+    setMotorEnvTorque(s) == duration(0) (
         env_tau_m := s;
     );
 
@@ -71,7 +70,7 @@ operations
 
     public step: () ==> ()
     step() == duration(0) (
-        dcl t : real := time / 1E9; -- in seconds
+        dcl t : real := time/1E9 + 1; -- in seconds
         dcl delta : real := t - env_last_time;
 
         env_tau_g := m * g * r * MATH`cos(env_q);
@@ -86,6 +85,9 @@ operations
         env_q := env_last_q + q'*delta;
         --update env_last_q
        env_last_q := env_q;
+       env_last_time := t;
+
+       if (time mod 1E8 = 0) then recordState();
     );
     --post controller`M2 <= env_q and env_q <= controller`M1;
 
@@ -93,7 +95,7 @@ sync
     per isFinished => (time > final_sim_time);
 
 thread
-    periodic(1E8,0,0,0)(step);
+    periodic(1E7,0,0,0)(step);
 
 end Environment 
 

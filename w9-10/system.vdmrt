@@ -1,0 +1,30 @@
+system MySystem
+
+instance variables
+    public static arm_controller:controller := new controller();
+    public static arm_env:Environment := new Environment();
+    public static arm_sensor:sensor := new sensor();
+    public static arm_motor:motor := new motor();
+
+    cpuEnv: CPU := new CPU (<FCFS>, 1E9);
+    cpuController : CPU := new CPU (<FCFS>, 1E9);
+    cpuSensor : CPU := new CPU (<FCFS>,1E9);
+    cpuMotor : CPU := new CPU(<FCFS>,1E9);
+
+    busCS : BUS := new BUS (<FCFS>, 1E100, {cpuController,cpuSensor});
+    busES : BUS := new BUS (<FCFS>, 1E100, {cpuEnv, cpuSensor});
+    busEM : BUS := new BUS (<FCFS>, 1E100, {cpuEnv, cpuMotor});
+    busCM : BUS := new BUS (<FCFS>, 1E100, {cpuController, cpuMotor});
+
+
+operations
+    public MySystem: () ==> MySystem
+    MySystem() == (
+        cpuEnv.deploy(arm_env);
+        cpuController.deploy(arm_controller);
+        cpuSensor.deploy(arm_sensor);
+        cpuMotor.deploy(arm_motor);
+    );
+
+
+end MySystem

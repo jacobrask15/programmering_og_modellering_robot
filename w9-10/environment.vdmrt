@@ -1,0 +1,99 @@
+class Environment
+
+values
+    public g : real = -9.81; --gravity
+    public Fc : real = 0.1; --friction factor
+    public Fv : real = 0.05; --viscour factor
+    public m : real = 1.2; --mass
+    public r: real = 0.8; --arm length
+
+--opg a)
+types 
+    public MOTORSTATE = <ON> | <OFF>;
+    public DIRECTION = <UP> | <DOWN>;
+
+instance variables
+    public q' : real := 0;
+    public env_last_q' : real := 0;
+    public env_last_q : real := 0;
+    public AE : real := 6.0;
+    public env_q : real := 0;
+    private final_sim_time : real;
+    public data_history : seq of (real * real); --time  q  moter_state  motor_direction 
+    public env_last_time : real;
+    public q'' : real := 0;
+    public inertia : real := m*r*r;
+    public env_tau_g : real := 0;
+    public env_tau_f : real := 0;
+    public env_tau_m : real := 0;
+
+operations
+    
+    public Environment: () ==> Environment
+    Environment() == (
+        final_sim_time := 0;
+        data_history := [];
+        env_last_time := 0;
+    );
+
+    public get_env_q : () ==> real
+    get_env_q() == duration(0) (
+        return env_q;
+    );
+
+    public setFinalSimulationTime : (real) ==> ()
+    setFinalSimulationTime(t) == duration(0) (
+        final_sim_time := t;
+    );
+
+    public isFinished : () ==> ()
+    isFinished() == skip;
+
+    public recordState : () ==> () 
+    recordState() == duration(0) (
+        data_history := data_history ^ [mk_(time/1E9,env_q)];
+    );
+
+
+    public setMotorEnvTorque: (real) ==> ()
+    setMotorEnvTorque(s) == duration(1E6) (
+        env_tau_m := s;
+    );
+
+
+    private sign : (real) ==> (int)
+    sign(x) == duration(0) (
+        if (x < 0) then return -1;
+        if (x >= 0) then return 1;    
+        return 0;
+    );
+
+
+    public step: () ==> ()
+    step() == duration(0) (
+        dcl t : real := time / 1E9; -- in seconds
+        dcl delta : real := t - env_last_time;
+
+        env_tau_g := m * g * r * MATH`cos(env_q);
+        env_tau_f := Fc * sign(q') + Fv * q';
+        
+        --tau_m is calculated in controller
+
+        q'' := (env_tau_m + env_tau_g - env_tau_f)/inertia;
+        q' := env_last_q' + q''*delta;
+        --update env_last_q'
+        env_last_q' := q';
+        env_q := env_last_q + q'*delta;
+        --update env_last_q
+       env_last_q := env_q;
+    );
+    --post controller`M2 <= env_q and env_q <= controller`M1;
+
+sync
+    per isFinished => (time > final_sim_time);
+
+thread
+    periodic(1E8,0,0,0)(step);
+
+end Environment 
+

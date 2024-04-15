@@ -17,8 +17,6 @@ values
     public M2 : real = 5;
     
 
-
-
 operations
     
     public controller: () ==> controller

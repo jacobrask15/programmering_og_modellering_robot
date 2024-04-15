@@ -1,0 +1,22 @@
+class World
+--M1 90 , target 45, q' = 10
+
+instance variables
+    io : IO := new IO();
+
+operations 
+
+    public RunScenario5 : () ==> (seq of (real * real))
+    RunScenario5() == (
+        MySystem`arm_env.AE := 2; -- accepted error
+        MySystem`arm_env.setFinalSimulationTime(8E9);
+
+        start(MySystem`arm_env);
+        start(MySystem`arm_controller);
+        start(MySystem`arm_sensor);
+        
+        MySystem`arm_env.isFinished();
+        return MySystem`arm_env.data_history;
+    );
+
+end World

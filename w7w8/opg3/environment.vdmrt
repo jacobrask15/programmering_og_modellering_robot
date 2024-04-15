@@ -18,6 +18,9 @@ instance variables
     public data_history : seq of (real * real * MOTORSTATE * DIRECTION ); --time  q  moter_state  motor_direction 
     public last_time : real;
 
+
+    
+
 operations
     
     public Environment: () ==> Environment

@@ -1,0 +1,69 @@
+class controller
+
+instance variables
+    public ctrl_q : real;
+    public target : real := 45;
+    public ctrl_last_q : real := 0;
+    public e : real := 0;
+    public last_e : real := 0;
+    public ctrl_last_t : real := 0;
+
+values
+    public M1 : real = 90;
+    public M2 : real = 5;
+    public Kp : real = 2; --to be calculated
+    public Kd : real = 5; -- to be calculated
+    
+
+operations
+    
+    public controller: () ==> controller
+    controller() == (
+        ctrl_q := 5;
+    );
+
+    public get_env_angle :() ==> () 
+    get_env_angle() == duration(0) ( -- duration is in sensor
+        ctrl_q := MySystem`arm_sensor.get_sensor_q();
+    );
+
+    public set_target : (real) ==> () 
+    set_target(t) == duration(0) (
+        if (t < M1 and t > M2) then (target := t;)  
+    )
+    pre t<M1 and t>M2
+    post target<M1 and target>M2;
+
+    public regulate :() ==> ()
+    regulate() == duration(0) (
+
+        -- error calculations
+        dcl time_now : real := time;
+        dcl dt : real;
+        dcl e' : real;
+        dcl tau_m : real;
+        e := ctrl_q - ctrl_last_q;
+        ctrl_last_q := ctrl_q;
+        dt := time_now - ctrl_last_t;
+        ctrl_last_t := time_now;
+        e' := (e - last_e)/dt;
+        last_e := e;
+
+        -- torque regulation calculations
+        tau_m := Kp*e + Kd*e';
+        MySystem`arm_motor.setMotorTorque(tau_m);
+    );
+
+    private loop : () ==> ()
+    loop() == duration(0) (
+        get_env_angle();
+        regulate();
+    );
+    
+
+    
+    thread
+        periodic(1E7,0,0,0)(loop); --10ms
+
+
+end controller 

@@ -1,0 +1,20 @@
+class motor
+types
+
+instance variables
+    tau_m: real
+
+operations
+    public motor: () ==> motor
+    motor() == (
+        tau_m := 0;
+    );
+    
+    public setMotorTorque: (real) ==> ()
+    setMotorTorque(x) == duration(0) ( 
+        tau_m := x;
+        MySystem`arm_env.setMotorEnvTorque(x);
+    ); 
+
+end motor
+

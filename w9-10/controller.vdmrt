@@ -57,14 +57,14 @@ operations
 
     private loop : () ==> ()
     loop() == duration(0) (
-        get_env_angle();
+        get_env_angle(); -- 1 ms
         regulate();
     );
     
 
     
     thread
-        periodic(1E7+2,0,0,0)(loop); 
+        periodic(1E7,0,0,0)(loop); -- 10ms
 
 
 end controller 

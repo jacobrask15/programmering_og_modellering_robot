@@ -14,7 +14,7 @@ instance variables
     public env_last_q : real := 0;
     public env_q : real := 0;
     private final_sim_time : real;
-    public data_history : seq of (real * real); --time  q  moter_state  motor_direction 
+    public data_history : seq of (real * real * real * real); --time  q  q' q''
     public env_last_time : real;
     public q'' : real := 0;
     public inertia : real := m*r*r;
@@ -46,7 +46,7 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time/1E9 + 1,env_q)];
+        data_history := data_history ^ [mk_(time/1E9 + 1,env_q,q',q'')];
     );
 
 
@@ -74,12 +74,13 @@ operations
         env_tau_f := Fc * sign(q') + Fv * q';
         
         --tau_m is calculated in controller
-
         q'' := (env_tau_m + env_tau_g - env_tau_f)/inertia;
         q' := env_last_q' + q''*delta;
+
         --update env_last_q'
         env_last_q' := q';
         env_q := env_last_q + q'*delta;
+
         --update env_last_q
        env_last_q := env_q;
        env_last_time := t;
@@ -91,8 +92,8 @@ operations
 sync
     per isFinished => (time > final_sim_time);
 
-thread   
-    periodic(1E8,0,0,0)(step);
+thread
+    periodic(1E7,0,0,0)(step); --10ms
 
 end Environment 
 

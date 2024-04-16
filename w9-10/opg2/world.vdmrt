@@ -6,7 +6,7 @@ instance variables
 
 operations 
 
-    public RunScenario5 : () ==> (seq of (real * real))
+    public RunScenario5 : () ==> (seq of (real * real * real * real))
     RunScenario5() == (
         MySystem`arm_env.setFinalSimulationTime(15E9);
 

@@ -1,5 +1,8 @@
 class Environment
 
+types
+    public EVENT = <MOTORFAIL> 
+
 values
     public g : real = -9.81; --gravity
     public Fc : real = 0.1; --friction factor
@@ -21,6 +24,7 @@ instance variables
     public env_tau_g : real := 0;
     public env_tau_f : real := 0;
     public env_tau_m : real := 0;
+    public events : seq of (real * EVENT);
 
 operations
     
@@ -36,10 +40,25 @@ operations
         return env_q;
     );
 
+    public AddEvent : real * EVENT ==> ()
+    AddEvent(t,e) == duration(0) (
+        events := events ^ [mk_(t,e)];
+    );
+
     public setFinalSimulationTime : (real) ==> ()
     setFinalSimulationTime(t) == duration(0) (
         final_sim_time := t;
     );
+
+    public CreateEvent : () ==> ()
+    CreateEvent() ==  duration(0) (
+        if len events > 0 then (
+            let mk_(stime,event) = hd events
+            in if stime < time then (
+                skip;
+            )
+        );
+    );  
 
     public isFinished : () ==> ()
     isFinished() == skip;

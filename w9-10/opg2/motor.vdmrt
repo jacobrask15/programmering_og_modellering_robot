@@ -1,20 +1,34 @@
 class motor
 types
+    public MODES = <WORKING> | <FAILED>
 
 instance variables
-    tau_m: real
+    tau_m: real;
+    motor_mode : MODES;
 
 operations
     public motor: () ==> motor
     motor() == (
         tau_m := 0;
+        motor_mode := <WORKING>
     );
-    
+
+    public MotorFail : () ==> ()
+    MotorFail() == (
+        motor_mode := <FAILED>;
+    );
+
+    public MotorRepair : () ==> ()
+    MotorRepair() == (
+        motor_mode := <WORKING>;
+    );
+
     public setMotorTorque: (real) ==> ()
     setMotorTorque(x) == duration(100) ( --100ns 
         tau_m := x;
         MySystem`arm_env.setMotorEnvTorque(x);
     ); 
+
 
 end motor
 

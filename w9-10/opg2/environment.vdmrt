@@ -54,10 +54,17 @@ operations
     public CreateEvent : () ==> ()
     CreateEvent() ==  duration(0) (
         if len events > 0 then (
-            let mk_(stime,event) = hd events
-            in if stime < time then (
-                skip;
-            )
+            let mk_(stime,EVENT) = hd events
+            in if stime <= time then (
+                if EVENT = <MOTORFAIL> then (
+                    MySystem`arm_motor.MotorFail();
+                )
+                else if EVENT = <MOTORREPAIR> then (
+                    MySystem`arm_motor.MotorRepair();
+                ); 
+                events := tl events;
+            );
+            
         );
     );  
 

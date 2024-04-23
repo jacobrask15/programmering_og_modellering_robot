@@ -87,9 +87,10 @@ operations
     step() == duration(0) (
         dcl t : real := time/1E9 + 1; -- in seconds
         dcl delta : real := t - env_last_time;
+        dcl rad : real := env_q*MATH`pi/180;
         env_last_time := t;
 
-        env_tau_g := m * g * r * MATH`cos(env_q);
+        env_tau_g := m * g * r * MATH`cos(rad);
         env_tau_f := Fc * sign(q') + Fv * q';
         
         --tau_m is calculated in controller

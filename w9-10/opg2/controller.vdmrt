@@ -16,7 +16,7 @@ instance variables
 
 values
     public M1 : real = 90;
-    public M2 : real = 5;
+    public M2 : real = 0;
     public Kp : real = 10; --to be calculated
     public Kd : real = 1.5; -- to be calculated
     public N1 : real = 60;
@@ -26,7 +26,7 @@ values
 operations
     public controller: () ==> controller
     controller() == (
-        ctrl_q := 5;
+        ctrl_q := 6;
         e := target;
         ctrl_mode := <INIT>;
     );
@@ -72,14 +72,14 @@ operations
     ctrlMode() == duration(0) (
 
         if ctrl_mode = <INIT> then target := (N1+N2)/2; 
-        if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        --if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
         if ctrl_mode = <INIT> and ctrl_q < N1 and ctrl_q > N2 then ctrl_mode := <NORMAL>; 
 
 
         if ctrl_mode = <NORMAL> then target := i_target; 
-        if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        --if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
         
-        if ctrl_mode = <EMERGENCY> then turn_off();
+        --if ctrl_mode = <EMERGENCY> then turn_off();
     );
 
     private loop : () ==> ()

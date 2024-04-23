@@ -1,6 +1,6 @@
 class motor
 types
-    public MODES = <WORKING> | <FAILED>
+    public MODES = <WORKING> | <FAILED> | <OFF>
 
 instance variables
     tau_m: real;
@@ -13,20 +13,27 @@ operations
         motor_mode := <WORKING>
     );
 
+    public MotorOff : () ==> () 
+    MotorOff() == duration(0) (
+        motor_mode := <OFF>
+    );
+
+
     public MotorFail : () ==> ()
-    MotorFail() == (
+    MotorFail() == duration(0) (
         motor_mode := <FAILED>;
     );
 
     public MotorRepair : () ==> ()
-    MotorRepair() == (
+    MotorRepair() == duration(0)(
         motor_mode := <WORKING>;
     );
 
     public setMotorTorque: (real) ==> ()
     setMotorTorque(x) == duration(100) ( --100ns 
-        tau_m := x;
-        MySystem`arm_env.setMotorEnvTorque(x);
+        if motor_mode = <FAILED> or motor_mode = <OFF> then (MySystem`arm_env.setMotorEnvTorque(0); return);
+        if motor_mode = <WORKING> then (tau_m := x;
+        MySystem`arm_env.setMotorEnvTorque(x);)
     ); 
 
 

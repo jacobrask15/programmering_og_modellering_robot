@@ -33,6 +33,7 @@ operations
         final_sim_time := 0;
         data_history := [];
         env_last_time := 0;
+        events := [];
     );
 
     public get_env_q : () ==> real

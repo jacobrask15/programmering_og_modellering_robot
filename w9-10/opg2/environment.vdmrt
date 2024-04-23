@@ -1,7 +1,7 @@
 class Environment
 
 types
-    public EVENT = <MOTORFAIL> 
+   public EVENT = <MOTORFAIL> | <MOTORREPAIR>
 
 values
     public g : real = -9.81; --gravity
@@ -114,6 +114,7 @@ operations
        env_last_time := t;
 
        if (time mod 1E8 = 0) then recordState();
+       CreateEvent();
     );
     --post controller`M2 <= env_q and env_q <= controller`M1;
 

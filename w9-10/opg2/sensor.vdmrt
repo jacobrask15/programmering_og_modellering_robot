@@ -7,7 +7,7 @@ instance variables
 operations
     public sensor: () ==> sensor
     sensor() == (
-        sensor_q := 5;
+        sensor_q := 6*MATH`pi/180;
     );
 
     public get_sensor_q: () ==> real
@@ -29,3 +29,5 @@ thread
     periodic(1E7,0,0,0)(read_env_q);
 
 end sensor
+
+

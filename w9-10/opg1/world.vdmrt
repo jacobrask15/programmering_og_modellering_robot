@@ -6,8 +6,15 @@ instance variables
 
 operations 
 
-    public RunScenario5 : () ==> (seq of (real * real * real * real))
-    RunScenario5() == (
+      --public static write(p) : seq1 of char * @p * filedirective -> bool
+    private PrintLine: seq of (real * real * real * real)  ==> ()
+    PrintLine (line) ==
+    (
+    def - = new IO().fwriteval[seq of (real * real * real * real)]( "test.txt",line,<start>) in skip;
+    );
+
+    public RunScenario1 : () ==> (seq of (real * real * real * real))
+    RunScenario1() == (
         MySystem`arm_env.setFinalSimulationTime(15E9);
 
         start(MySystem`arm_env);
@@ -15,6 +22,9 @@ operations
         start(MySystem`arm_sensor);
         
         MySystem`arm_env.isFinished();
+
+        PrintLine(MySystem`arm_env.data_history);
+
         return MySystem`arm_env.data_history;
     );
 

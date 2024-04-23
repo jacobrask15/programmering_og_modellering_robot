@@ -2,24 +2,23 @@ class controller
 
 instance variables
     public ctrl_q : real;
-    public target : real := 45;
+    public target : real := 45*MATH`pi/180; --radians
     public ctrl_last_q : real := 0;
     public e : real;
     public last_e : real := 0;
     public ctrl_last_t : real := 0;
 
 values
-    public M1 : real = 90;
-    public M2 : real = 5;
-    public Kp : real = 10; --to be calculated
-    public Kd : real = 1.5; -- to be calculated
-    
+    public M1 : real = 90*MATH`pi/180;
+    public M2 : real = 5*MATH`pi/180;
+    public Kp : real = 10; --to be calculated 10
+    public Kd : real = 1.5; -- to be calculated 1.5    
 
 operations
     
     public controller: () ==> controller
     controller() == (
-        ctrl_q := 5;
+        ctrl_q := 5*MATH`pi/180;
         e := target;
     );
 

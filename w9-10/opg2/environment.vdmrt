@@ -1,7 +1,7 @@
 class Environment
 
 types
-    public EVENT = <MOTORFAIL> 
+    public EVENT = <MOTORFAIL> | <MOTORREPAIR>
 
 values
     public g : real = -9.81; --gravity
@@ -17,14 +17,14 @@ instance variables
     public env_last_q : real := 0;
     public env_q : real := 0;
     private final_sim_time : real;
-    public data_history : seq of (real * real * real * real); --time  q  q' q''
+    public data_history : seq of (real * real * real * real * real); --time , q , q' , q''
     public env_last_time : real;
     public q'' : real := 0;
     public inertia : real := m*r*r;
     public env_tau_g : real := 0;
     public env_tau_f : real := 0;
     public env_tau_m : real := 0;
-    public events : seq of (real * EVENT);
+    public events : seq of (real * EVENT) := [];
 
 operations
     
@@ -53,10 +53,17 @@ operations
     public CreateEvent : () ==> ()
     CreateEvent() ==  duration(0) (
         if len events > 0 then (
-            let mk_(stime,event) = hd events
-            in if stime < time then (
-                skip;
-            )
+            let mk_(stime,EVENT) = hd events
+            in if stime <= time then (
+                if EVENT = <MOTORFAIL> then (
+                    MySystem`arm_motor.MotorFail();
+                )
+                else if EVENT = <MOTORREPAIR> then (
+                    MySystem`arm_motor.MotorRepair();
+                ); 
+                events := tl events;
+            );
+            
         );
     );  
 
@@ -65,7 +72,7 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time/1E9 + 1,env_q,q',q'')];
+        data_history := data_history ^ [mk_(time/1E9 + 1,env_q,q',q'', MySystem`arm_controller.e)];
     );
 
 
@@ -86,7 +93,8 @@ operations
     public step: () ==> ()
     step() == duration(0) (
         dcl t : real := time/1E9 + 1; -- in seconds
-        dcl delta : real := t - env_last_time;
+        dcl delta : real := t - env_last_time;  
+        
         env_last_time := t;
 
         env_tau_g := m * g * r * MATH`cos(env_q);
@@ -104,15 +112,24 @@ operations
        env_last_q := env_q;
        env_last_time := t;
 
+       --if (env_q < 0) then env_q := 0; -- robot is standing on a table
+       --if (env_q > MATH`pi) then env_q := MATH`pi; -- robot is standing on a table
        if (time mod 1E8 = 0) then recordState();
-    );
-    --post controller`M2 <= env_q and env_q <= controller`M1;
 
+    ); --post controller`M2 <= env_q and env_q <= controller`M1;
+
+    private loop : () ==> ()
+    loop() == duration(0) (
+        CreateEvent();
+        step();
+    );
+    
 sync
     per isFinished => (time > final_sim_time);
 
 thread
-    periodic(1E7,0,0,0)(step); --10ms
+    periodic(1E7,0,0,0)(loop); --10ms
+
 
 end Environment 
 

@@ -67,9 +67,9 @@ operations
     public step: () ==> ()
     step() == duration(0) (
         dcl t : real := time/1E9 + 1; -- in seconds
-        dcl delta : real := t - env_last_time;
+        dcl delta : real := t - env_last_time;  
+        
         env_last_time := t;
-
         env_tau_g := m * g * r * MATH`cos(env_q);
         env_tau_f := Fc * sign(q') + Fv * q';
         
@@ -85,9 +85,12 @@ operations
        env_last_q := env_q;
        env_last_time := t;
 
+       if (env_q < 0) then env_q := 0; q' := 0; -- robot is standing on a table
+       if (env_q > MATH`pi) then env_q := MATH`pi; -- robot is standing on a table
        if (time mod 1E8 = 0) then recordState();
-    );
-    --post controller`M2 <= env_q and env_q <= controller`M1;
+
+    ); --post controller`M2 <= env_q and env_q <= controller`M1;
+
 
 sync
     per isFinished => (time > final_sim_time);

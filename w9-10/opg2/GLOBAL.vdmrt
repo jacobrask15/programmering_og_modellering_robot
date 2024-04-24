@@ -1,0 +1,7 @@
+class GLOBAL
+
+values
+    public INITIAL_ANGLE : real = 6;
+    
+
+end GLOBAL

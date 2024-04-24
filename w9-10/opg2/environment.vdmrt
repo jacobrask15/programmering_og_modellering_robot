@@ -14,8 +14,8 @@ values
 instance variables
     public q' : real := 0;
     public env_last_q' : real := 0;
-    public env_last_q : real := 0;
-    public env_q : real := 0;
+    public env_last_q : real := 6;
+    public env_q : real := 6;
     private final_sim_time : real;
     public data_history : seq of (real * real * real * real); --time  q  q' q''
     public env_last_time : real;
@@ -32,7 +32,7 @@ operations
     Environment() == (
         final_sim_time := 0;
         data_history := [];
-        env_last_time := 0;
+        env_last_time := 1;
         events := [];
     );
 

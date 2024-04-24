@@ -5,20 +5,20 @@ types
 
 
 instance variables
-    public ctrl_q : real;
-    public target : real := 45;
-    public ctrl_last_q : real := 0;
+    public ctrl_q : real :=6;
+    public target : real := 50;
+    public ctrl_last_q : real := 6;
     public e : real;
     public last_e : real := 0;
-    public ctrl_last_t : real := 0;
+    public ctrl_last_t : real := 1;
     public ctrl_mode : MODES;
     public i_target : real := 0;
 
 values
     public M1 : real = 90;
     public M2 : real = 0;
-    public Kp : real = 10; --to be calculated
-    public Kd : real = 1.5; -- to be calculated
+    public Kp : real = 3; --to be calculated
+    public Kd : real = 1; -- to be calculated
     public N1 : real = 60;
     public N2 : real = 20;
     
@@ -26,8 +26,9 @@ values
 operations
     public controller: () ==> controller
     controller() == (
-        ctrl_q := 6;
+        --ctrl_q := 89;
         e := target;
+        last_e := target;
         ctrl_mode := <INIT>;
     );
 
@@ -63,29 +64,24 @@ operations
         MySystem`arm_motor.setMotorTorque(tau_m);
     );
 
-    public turn_off : () ==> ()
-    turn_off() == duration(0) (
-        skip;
-    );
-
     public ctrlMode : () ==> ()
     ctrlMode() == duration(0) (
 
         if ctrl_mode = <INIT> then target := (N1+N2)/2; 
-        --if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
         if ctrl_mode = <INIT> and ctrl_q < N1 and ctrl_q > N2 then ctrl_mode := <NORMAL>; 
 
 
         if ctrl_mode = <NORMAL> then target := i_target; 
-        --if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
         
-        --if ctrl_mode = <EMERGENCY> then turn_off();
+        if ctrl_mode = <EMERGENCY> then MySystem`arm_motor.MotorOff();
     );
 
     private loop : () ==> ()
     loop() == duration(0) (
         get_env_angle(); -- 1 ms
-        ctrlMode();
+        --ctrlMode();
         regulate();
     );
     

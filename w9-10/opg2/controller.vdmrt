@@ -63,23 +63,18 @@ operations
         MySystem`arm_motor.setMotorTorque(tau_m);
     );
 
-    public turn_off : () ==> ()
-    turn_off() == duration(0) (
-        skip;
-    );
-
     public ctrlMode : () ==> ()
     ctrlMode() == duration(0) (
 
         if ctrl_mode = <INIT> then target := (N1+N2)/2; 
-        --if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
         if ctrl_mode = <INIT> and ctrl_q < N1 and ctrl_q > N2 then ctrl_mode := <NORMAL>; 
 
 
         if ctrl_mode = <NORMAL> then target := i_target; 
-        --if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
         
-        --if ctrl_mode = <EMERGENCY> then turn_off();
+        if ctrl_mode = <EMERGENCY> then MySystem`arm_motor.MotorOff();
     );
 
     private loop : () ==> ()

@@ -11,7 +11,7 @@ operations
     );
 
     public get_sensor_q: () ==> real
-    get_sensor_q() == duration(0) ( --1ms
+    get_sensor_q() == duration(GLOBAL`GET_ANGLE_DURATION) ( --1ms
         return sensor_q;
     );
 

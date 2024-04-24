@@ -17,8 +17,8 @@ instance variables
 values
     public M1 : real = GLOBAL`HARD_UPPER;
     public M2 : real = GLOBAL`HARD_LOWER;
-    public Kp : real = 3; --to be calculated
-    public Kd : real = 1; -- to be calculated
+    public Kp : real = GLOBAL`KP; --to be calculated
+    public Kd : real = GLOBAL`KD; -- to be calculated
     public N1 : real = GLOBAL`SOFT_UPPER;
     public N2 : real = GLOBAL`HARD_LOWER;
     

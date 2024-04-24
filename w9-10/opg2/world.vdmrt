@@ -14,13 +14,13 @@ operations
     );
 
 
-    public RunScenario5 : () ==> ()
+    public RunScenario5 : () ==> () --seq of (real * real * real * real * controller`MODES)
     RunScenario5() == (
-        MySystem`arm_env.setFinalSimulationTime(20E9);
+        MySystem`arm_env.setFinalSimulationTime(3E9);
         MySystem`arm_controller.set_target(GLOBAL`TARGET);
 
-        MySystem`arm_env.AddEvent(12E9, <MOTORFAIL>);
-        MySystem`arm_env.AddEvent(14E9, <MOTORREPAIR>);
+        --MySystem`arm_env.AddEvent(12E9, <MOTORFAIL>);
+        --MySystem`arm_env.AddEvent(14E9, <MOTORREPAIR>);
 
         start(MySystem`arm_env);
         start(MySystem`arm_controller);
@@ -28,6 +28,7 @@ operations
         
         MySystem`arm_env.isFinished();
         PrintLine(MySystem`arm_env.data_history);
+        --return MySystem`arm_env.data_history;
     );
 
 end World

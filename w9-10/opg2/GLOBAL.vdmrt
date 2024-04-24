@@ -1,13 +1,16 @@
 class GLOBAL
 
 values
-    public INITIAL_ANGLE : real = 6;
+    public INITIAL_ANGLE : real = 6*MATH`pi/180;
     public PERIOD : real = 1E7;
-    public HARD_UPPER : real = 90;
+    public HARD_UPPER : real = 90*MATH`pi/180;
     public HARD_LOWER : real = 0;
-    public SOFT_UPPER : real = 60;
-    public SOFT_LOWER : real = 20;
-    public TARGET : real = 55;
+    public SOFT_UPPER : real = 60*MATH`pi/180;
+    public SOFT_LOWER : real = 20*MATH`pi/180;
+    public TARGET : real = 0.75;
+    public KP : real = 200; --3
+    public KD : real = 10; --1
+    public GET_ANGLE_DURATION : real = 1E6;
     
 
 end GLOBAL

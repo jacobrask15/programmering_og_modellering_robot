@@ -71,7 +71,7 @@ operations
 
     public recordState : () ==> () 
     recordState() == duration(0) (
-        data_history := data_history ^ [mk_(time/1E9 + 1,env_q,q',env_tau_m, MySystem`arm_controller.ctrl_mode)];
+        data_history := data_history ^ [mk_(time/1E9,env_q,q',q'', MySystem`arm_controller.ctrl_mode)];
     );
 
     public setMotorEnvTorque: (real) ==> ()
@@ -92,10 +92,10 @@ operations
     step() == duration(0) (
         dcl t : real := time/1E9; -- in seconds
         dcl delta : real := t - env_last_time;
-        dcl rad : real := env_q*MATH`pi/180;
+        --dcl rad : real := env_q*MATH`pi/180;
         env_last_time := t;
 
-        env_tau_g := m * g * r * MATH`cos(rad);
+        env_tau_g := m * g * r * MATH`cos(env_q);
         env_tau_f := Fc * sign(q') + Fv * q';
         
         --tau_m is calculated in controller
@@ -110,7 +110,7 @@ operations
        env_last_q := env_q;
        env_last_time := t;
 
-       if (time mod 1E8 = 0) then recordState();
+       if (time mod 1E7 = 0) then recordState();
        CreateEvent();
     );
     --post controller`M2 <= env_q and env_q <= controller`M1;

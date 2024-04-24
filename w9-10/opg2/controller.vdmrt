@@ -10,7 +10,7 @@ instance variables
     public ctrl_last_q : real := 6;
     public e : real;
     public last_e : real := 0;
-    public ctrl_last_t : real := 1;
+    public ctrl_last_t : real := 0;
     public ctrl_mode : MODES;
     public i_target : real := 0;
 
@@ -27,8 +27,8 @@ operations
     public controller: () ==> controller
     controller() == (
         --ctrl_q := 89;
-        e := target;
-        last_e := target;
+        e := target - ctrl_q;
+        last_e := target - ctrl_q;
         ctrl_mode := <INIT>;
     );
 
@@ -48,7 +48,7 @@ operations
     regulate() == duration(0) (
 
         -- error calculations
-        dcl time_now : real := time/1E9 + 1;
+        dcl time_now : real := time/1E9;
         dcl dt : real;
         dcl e' : real;
         dcl tau_m : real;

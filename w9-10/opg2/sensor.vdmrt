@@ -7,7 +7,7 @@ instance variables
 operations
     public sensor: () ==> sensor
     sensor() == (
-        sensor_q := 5;
+        sensor_q := 6;
     );
 
     public get_sensor_q: () ==> real

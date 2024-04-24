@@ -7,17 +7,17 @@ instance variables
 operations
 
 --public static write(p) : seq1 of char * @p * filedirective -> bool
-    private PrintLine: seq of (real * real * real * real)  ==> ()
+    private PrintLine: seq of (real * real * real * real * controller`MODES)  ==> ()
     PrintLine (line) ==
     (
-    def - = new IO().fwriteval[seq of (real * real * real * real)]( "test.txt",line,<start>) in skip;
+    def - = new IO().fwriteval[seq of (real * real * real * real * controller`MODES)]( "test.txt",line,<start>) in skip;
     );
 
 
-    public RunScenario5 : () ==> (seq of (real * real * real * real))
+    public RunScenario5 : () ==> ()
     RunScenario5() == (
-        MySystem`arm_env.setFinalSimulationTime(15E9);
-        MySystem`arm_controller.set_target(55);
+        MySystem`arm_env.setFinalSimulationTime(50E9);
+        MySystem`arm_controller.set_target(GLOBAL`TARGET);
 
         --MySystem`arm_env.AddEvent(2E9, <MOTORFAIL>);
         --MySystem`arm_env.AddEvent(4E9, <MOTORREPAIR>);
@@ -28,7 +28,6 @@ operations
         
         MySystem`arm_env.isFinished();
         PrintLine(MySystem`arm_env.data_history);
-        return MySystem`arm_env.data_history;
     );
 
 end World

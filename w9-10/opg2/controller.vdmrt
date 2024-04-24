@@ -5,22 +5,22 @@ types
 
 
 instance variables
-    public ctrl_q : real :=6;
-    public target : real := 50;
-    public ctrl_last_q : real := 6;
+    public ctrl_q : real := GLOBAL`INITIAL_ANGLE;
+    public target : real := GLOBAL`TARGET;
+    public ctrl_last_q : real := GLOBAL`INITIAL_ANGLE;
     public e : real;
-    public last_e : real := 0;
+    public last_e : real;
     public ctrl_last_t : real := 0;
     public ctrl_mode : MODES;
     public i_target : real := 0;
 
 values
-    public M1 : real = 90;
-    public M2 : real = 0;
+    public M1 : real = GLOBAL`HARD_UPPER;
+    public M2 : real = GLOBAL`HARD_LOWER;
     public Kp : real = 3; --to be calculated
     public Kd : real = 1; -- to be calculated
-    public N1 : real = 60;
-    public N2 : real = 20;
+    public N1 : real = GLOBAL`SOFT_UPPER;
+    public N2 : real = GLOBAL`HARD_LOWER;
     
 
 operations
@@ -42,7 +42,7 @@ operations
         if (t < M1 and t > M2) then (i_target := t;)  
     )
     pre t<M1 and t>M2
-    post target<M1 and target>M2;
+    post i_target<M1 and i_target>M2;
 
     public regulate :() ==> ()
     regulate() == duration(0) (
@@ -68,12 +68,12 @@ operations
     ctrlMode() == duration(0) (
 
         if ctrl_mode = <INIT> then target := (N1+N2)/2; 
-        if ctrl_mode = <INIT> and ctrl_q > M1 or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        if ctrl_mode = <INIT> and (ctrl_q > M1 or ctrl_q < M2) then ctrl_mode := <EMERGENCY>; 
         if ctrl_mode = <INIT> and ctrl_q < N1 and ctrl_q > N2 then ctrl_mode := <NORMAL>; 
 
 
         if ctrl_mode = <NORMAL> then target := i_target; 
-        if ctrl_mode = <NORMAL> and ctrl_q > M1  or ctrl_q < M2 then ctrl_mode := <EMERGENCY>; 
+        if ctrl_mode = <NORMAL> and (ctrl_q > M1  or ctrl_q < M2) then ctrl_mode := <EMERGENCY>; 
         
         if ctrl_mode = <EMERGENCY> then MySystem`arm_motor.MotorOff();
     );
@@ -81,14 +81,14 @@ operations
     private loop : () ==> ()
     loop() == duration(0) (
         get_env_angle(); -- 1 ms
-        --ctrlMode();
+        ctrlMode();
         regulate();
     );
     
 
     
     thread
-        periodic(1E7,0,0,0)(loop); -- 10ms
+        periodic(GLOBAL`PERIOD,0,0,0)(loop); -- 10ms
 
 
 end controller 

@@ -7,7 +7,7 @@ instance variables
 operations
     public sensor: () ==> sensor
     sensor() == (
-        sensor_q := 6;
+        sensor_q := GLOBAL`INITIAL_ANGLE;
     );
 
     public get_sensor_q: () ==> real
@@ -24,8 +24,7 @@ operations
 sync
     mutex(get_sensor_q, read_env_q)
 
-
 thread
-    periodic(1E7,0,0,0)(read_env_q);
+    periodic(GLOBAL`PERIOD,0,0,0)(read_env_q);
 
 end sensor

@@ -2,6 +2,12 @@ class GLOBAL
 
 values
     public INITIAL_ANGLE : real = 6;
+    public PERIOD : real = 1E7;
+    public HARD_UPPER : real = 90;
+    public HARD_LOWER : real = 0;
+    public SOFT_UPPER : real = 85;
+    public SOFT_LOWER : real = 20;
+    public TARGET : real = 84;
     
 
 end GLOBAL

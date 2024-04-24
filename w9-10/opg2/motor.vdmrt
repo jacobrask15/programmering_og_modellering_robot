@@ -31,7 +31,7 @@ operations
 
     public setMotorTorque: (real) ==> ()
     setMotorTorque(x) == duration(100) ( --100ns 
-        if motor_mode = <FAILED> or motor_mode = <OFF> then (MySystem`arm_env.setMotorEnvTorque(0); return);
+        if (motor_mode = <FAILED> or motor_mode = <OFF>) then (MySystem`arm_env.setMotorEnvTorque(0); return);
         if motor_mode = <WORKING> then (tau_m := x;
         MySystem`arm_env.setMotorEnvTorque(x);)
     ); 

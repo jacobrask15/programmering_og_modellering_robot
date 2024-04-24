@@ -16,11 +16,11 @@ operations
 
     public RunScenario5 : () ==> ()
     RunScenario5() == (
-        MySystem`arm_env.setFinalSimulationTime(50E9);
+        MySystem`arm_env.setFinalSimulationTime(20E9);
         MySystem`arm_controller.set_target(GLOBAL`TARGET);
 
-        --MySystem`arm_env.AddEvent(2E9, <MOTORFAIL>);
-        --MySystem`arm_env.AddEvent(4E9, <MOTORREPAIR>);
+        MySystem`arm_env.AddEvent(12E9, <MOTORFAIL>);
+        MySystem`arm_env.AddEvent(14E9, <MOTORREPAIR>);
 
         start(MySystem`arm_env);
         start(MySystem`arm_controller);

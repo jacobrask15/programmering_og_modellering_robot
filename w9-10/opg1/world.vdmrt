@@ -4,7 +4,14 @@ class World
 instance variables
     io : IO := new IO();
 
-operations 
+operations
+
+    private PrintLine: seq of (real * real * real * real)  ==> ()
+    PrintLine (line) ==
+    (
+        def - = new IO().fwriteval[seq of (real * real * real * real)]( "test.txt",line,<start>) in skip;
+    );
+
 
     public RunScenario5 : () ==> (seq of (real * real * real * real))
     RunScenario5() == (
@@ -15,6 +22,7 @@ operations
         start(MySystem`arm_sensor);
         
         MySystem`arm_env.isFinished();
+        PrintLine(MySystem`arm_env.data_history);
         return MySystem`arm_env.data_history;
     );
 

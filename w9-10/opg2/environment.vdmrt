@@ -18,7 +18,7 @@ instance variables
     public env_q : real := 6;
     private final_sim_time : real;
     public data_history : seq of (real * real * real * real); --time  q  q' q''
-    public env_last_time : real;
+    public env_last_time : real := 0;
     public q'' : real := 0;
     public inertia : real := m*r*r;
     public env_tau_g : real := 0;
@@ -32,7 +32,6 @@ operations
     Environment() == (
         final_sim_time := 0;
         data_history := [];
-        env_last_time := 1;
         events := [];
     );
 
@@ -93,7 +92,7 @@ operations
 
     public step: () ==> ()
     step() == duration(0) (
-        dcl t : real := time/1E9 + 1; -- in seconds
+        dcl t : real := time/1E9; -- in seconds
         dcl delta : real := t - env_last_time;
         dcl rad : real := env_q*MATH`pi/180;
         env_last_time := t;
